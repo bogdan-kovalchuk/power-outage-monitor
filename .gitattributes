@@ -1,0 +1,15 @@
+# Normalize line endings to LF in the repository regardless of local
+# core.autocrlf, so a checkout on any machine produces the same blobs.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.bin binary
+
+# CAD and print files are stored byte for byte as exported.
+*.SLDPRT binary
+*.SLDASM binary
+*.STEP binary
+*.step binary
+*.STL binary
+*.stl binary
