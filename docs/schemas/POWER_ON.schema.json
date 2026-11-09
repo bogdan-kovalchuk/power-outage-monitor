@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "POWER_ON",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event",
+    "device",
+    "state",
+    "grid",
+    "power",
+    "armed",
+    "duration_s",
+    "uptime_s",
+    "alert_mode",
+    "ts"
+  ],
+  "properties": {
+    "event": { "const": "POWER_ON" },
+    "device": { "type": "string", "minLength": 1, "maxLength": 32 },
+    "state": { "type": "string", "enum": ["ARMED", "DISARMED", "SNOOZED"] },
+    "grid": { "const": "ONLINE" },
+    "power": { "const": true },
+    "armed": { "type": "boolean" },
+    "duration_s": { "type": "integer", "minimum": 0 },
+    "uptime_s": { "type": "integer", "minimum": 0 },
+    "alert_mode": { "type": "string", "enum": ["OUTAGE_ONLY", "OUTAGE_AND_RESTORE"] },
+    "ts": { "type": "integer", "minimum": 0 }
+  }
+}

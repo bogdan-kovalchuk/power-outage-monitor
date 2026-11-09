@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "POWER_OFF",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event",
+    "device",
+    "state",
+    "grid",
+    "power",
+    "armed",
+    "duration_s",
+    "uptime_s",
+    "ts"
+  ],
+  "properties": {
+    "event": { "const": "POWER_OFF" },
+    "device": { "type": "string", "minLength": 1, "maxLength": 32 },
+    "state": { "type": "string", "enum": ["ARMED"] },
+    "grid": { "const": "OFFLINE" },
+    "power": { "const": false },
+    "armed": { "const": true },
+    "duration_s": { "type": "integer", "minimum": 0 },
+    "uptime_s": { "type": "integer", "minimum": 0 },
+    "ts": { "type": "integer", "minimum": 0 }
+  }
+}

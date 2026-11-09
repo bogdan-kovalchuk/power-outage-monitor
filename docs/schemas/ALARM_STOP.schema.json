@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ALARM_STOP",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event",
+    "device",
+    "state",
+    "snooze_remaining_s",
+    "uptime_s",
+    "ts"
+  ],
+  "properties": {
+    "event": { "const": "ALARM_STOP" },
+    "device": { "type": "string", "minLength": 1, "maxLength": 32 },
+    "state": { "type": "string", "enum": ["DISARMED", "SNOOZED"] },
+    "snooze_remaining_s": { "type": "integer", "minimum": 0 },
+    "uptime_s": { "type": "integer", "minimum": 0 },
+    "ts": { "type": "integer", "minimum": 0 }
+  }
+}

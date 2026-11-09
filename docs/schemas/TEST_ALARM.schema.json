@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TEST_ALARM",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event",
+    "device",
+    "state",
+    "grid",
+    "power",
+    "armed",
+    "duration_s",
+    "uptime_s",
+    "ts"
+  ],
+  "properties": {
+    "event": { "const": "TEST_ALARM" },
+    "device": { "type": "string", "minLength": 1, "maxLength": 32 },
+    "state": { "type": "string", "enum": ["ARMED", "DISARMED", "SNOOZED"] },
+    "grid": { "const": "TEST" },
+    "power": { "const": false },
+    "armed": { "type": "boolean" },
+    "duration_s": { "type": "integer", "minimum": 0, "maximum": 0 },
+    "uptime_s": { "type": "integer", "minimum": 0 },
+    "ts": { "type": "integer", "minimum": 0 }
+  }
+}

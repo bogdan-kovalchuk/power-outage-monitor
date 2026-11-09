@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GET /api/config",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "wifi",
+    "device_name",
+    "ap_ssid",
+    "has_ap_pass",
+    "setup_window_s",
+    "has_admin_pass",
+    "debounce_ms",
+    "restore_cooldown_ms",
+    "snooze_default_min",
+    "alert_mode",
+    "cloud_enabled",
+    "webhook_url",
+    "local_url"
+  ],
+  "properties": {
+    "wifi": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["slot", "ssid", "has_pass"],
+        "properties": {
+          "slot": { "type": "integer", "minimum": 0, "maximum": 4 },
+          "ssid": { "type": "string", "maxLength": 32 },
+          "has_pass": { "type": "boolean" }
+        }
+      }
+    },
+    "device_name": { "type": "string", "minLength": 1, "maxLength": 32, "pattern": "^[a-z0-9]([a-z0-9-]{0,30}[a-z0-9])?$" },
+    "ap_ssid": { "type": "string", "minLength": 1, "maxLength": 32 },
+    "has_ap_pass": { "type": "boolean" },
+    "setup_window_s": { "type": "integer", "minimum": 0, "maximum": 600 },
+    "has_admin_pass": { "type": "boolean" },
+    "debounce_ms": { "type": "integer", "minimum": 50, "maximum": 10000 },
+    "restore_cooldown_ms": { "type": "integer", "minimum": 0, "maximum": 60000 },
+    "snooze_default_min": { "type": "integer", "minimum": 1, "maximum": 1440 },
+    "alert_mode": { "type": "integer", "enum": [0, 1] },
+    "cloud_enabled": { "type": "boolean" },
+    "webhook_url": { "type": "string", "maxLength": 256 },
+    "local_url": { "type": "string", "maxLength": 256 }
+  }
+}

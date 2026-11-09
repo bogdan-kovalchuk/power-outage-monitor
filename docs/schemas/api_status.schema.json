@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GET /api/status",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "device",
+    "fw_version",
+    "grid",
+    "mode",
+    "power",
+    "armed",
+    "outage_duration_s",
+    "snooze_remaining_s",
+    "uptime_s",
+    "wifi",
+    "setup_ap",
+    "admin_protected",
+    "snooze_default_min",
+    "free_heap",
+    "ts",
+    "notify"
+  ],
+  "$defs": {
+    "notifyResult": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["event", "ok", "code", "reason", "age_s"],
+      "properties": {
+        "event": { "type": "string", "minLength": 1, "maxLength": 16 },
+        "ok": { "type": "boolean" },
+        "code": { "type": "integer" },
+        "reason": { "type": "string", "maxLength": 64 },
+        "age_s": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "properties": {
+    "device": { "type": "string", "minLength": 1, "maxLength": 32 },
+    "fw_version": { "type": "string", "minLength": 1, "maxLength": 32 },
+    "grid": { "type": "string", "enum": ["BOOTING", "ONLINE", "OFFLINE"] },
+    "mode": { "type": "string", "enum": ["ARMED", "DISARMED", "SNOOZED"] },
+    "power": { "type": "boolean" },
+    "armed": { "type": "boolean" },
+    "outage_duration_s": { "type": "integer", "minimum": 0 },
+    "snooze_remaining_s": { "type": "integer", "minimum": 0 },
+    "uptime_s": { "type": "integer", "minimum": 0 },
+    "wifi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["connected", "ssid", "slot", "ip", "rssi"],
+      "properties": {
+        "connected": { "type": "boolean" },
+        "ssid": { "type": "string", "maxLength": 32 },
+        "slot": { "type": "integer", "minimum": -1, "maximum": 4 },
+        "ip": { "type": "string" },
+        "rssi": { "type": "integer", "minimum": -120, "maximum": 0 }
+      }
+    },
+    "setup_ap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["active", "ssid", "ip", "clients", "closes_in_s"],
+      "properties": {
+        "active": { "type": "boolean" },
+        "ssid": { "type": "string", "maxLength": 32 },
+        "ip": { "type": "string" },
+        "clients": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "closes_in_s": { "type": "integer", "minimum": 0, "maximum": 1800 }
+      }
+    },
+    "admin_protected": { "type": "boolean" },
+    "snooze_default_min": { "type": "integer", "minimum": 1, "maximum": 1440 },
+    "free_heap": { "type": "integer", "minimum": 0 },
+    "ts": { "type": "integer", "minimum": 0 },
+    "notify": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["local", "cloud"],
+      "properties": {
+        "local": { "$ref": "#/$defs/notifyResult" },
+        "cloud": { "$ref": "#/$defs/notifyResult" }
+      }
+    }
+  }
+}
