@@ -1,0 +1,444 @@
+{
+  "cases": [
+    {
+      "name": "empty_object_noop",
+      "body": {}
+    },
+    {
+      "name": "unknown_top_key",
+      "body": {"unknown_key": 1}
+    },
+    {
+      "name": "non_object_body_array",
+      "body": []
+    },
+    {
+      "name": "setup_window_min",
+      "body": {"setup_window_s": 0}
+    },
+    {
+      "name": "setup_window_max",
+      "body": {"setup_window_s": 600}
+    },
+    {
+      "name": "setup_window_below_min",
+      "body": {"setup_window_s": -1}
+    },
+    {
+      "name": "setup_window_above_max",
+      "body": {"setup_window_s": 601}
+    },
+    {
+      "name": "setup_window_wrong_type_float",
+      "body": {"setup_window_s": 60.5}
+    },
+    {
+      "name": "setup_window_wrong_type_str",
+      "body": {"setup_window_s": "60"}
+    },
+    {
+      "name": "setup_window_wrong_type_bool",
+      "body": {"setup_window_s": true}
+    },
+    {
+      "name": "debounce_min",
+      "body": {"debounce_ms": 50}
+    },
+    {
+      "name": "debounce_max",
+      "body": {"debounce_ms": 10000}
+    },
+    {
+      "name": "debounce_below_min",
+      "body": {"debounce_ms": 49}
+    },
+    {
+      "name": "debounce_above_max",
+      "body": {"debounce_ms": 10001}
+    },
+    {
+      "name": "debounce_wrong_type_bool",
+      "body": {"debounce_ms": false}
+    },
+    {
+      "name": "cooldown_min",
+      "body": {"restore_cooldown_ms": 0}
+    },
+    {
+      "name": "cooldown_max",
+      "body": {"restore_cooldown_ms": 60000}
+    },
+    {
+      "name": "cooldown_below_min",
+      "body": {"restore_cooldown_ms": -1}
+    },
+    {
+      "name": "cooldown_above_max",
+      "body": {"restore_cooldown_ms": 60001}
+    },
+    {
+      "name": "cooldown_wrong_type_str",
+      "body": {"restore_cooldown_ms": "0"}
+    },
+    {
+      "name": "snooze_min",
+      "body": {"snooze_default_min": 1}
+    },
+    {
+      "name": "snooze_max",
+      "body": {"snooze_default_min": 1440}
+    },
+    {
+      "name": "snooze_below_min",
+      "body": {"snooze_default_min": 0}
+    },
+    {
+      "name": "snooze_above_max",
+      "body": {"snooze_default_min": 1441}
+    },
+    {
+      "name": "snooze_wrong_type_str",
+      "body": {"snooze_default_min": "30"}
+    },
+    {
+      "name": "alert_mode_0",
+      "body": {"alert_mode": 0}
+    },
+    {
+      "name": "alert_mode_1",
+      "body": {"alert_mode": 1}
+    },
+    {
+      "name": "alert_mode_below_min",
+      "body": {"alert_mode": -1}
+    },
+    {
+      "name": "alert_mode_above_max",
+      "body": {"alert_mode": 2}
+    },
+    {
+      "name": "alert_mode_wrong_type_str",
+      "body": {"alert_mode": "1"}
+    },
+    {
+      "name": "alert_mode_wrong_type_bool",
+      "body": {"alert_mode": true}
+    },
+    {
+      "name": "cloud_enabled_true",
+      "body": {"cloud_enabled": true}
+    },
+    {
+      "name": "cloud_enabled_false",
+      "initial": {"cloud_enabled": true},
+      "body": {"cloud_enabled": false}
+    },
+    {
+      "name": "cloud_enabled_wrong_type_int",
+      "body": {"cloud_enabled": 1}
+    },
+    {
+      "name": "cloud_enabled_wrong_type_str",
+      "body": {"cloud_enabled": "true"}
+    },
+    {
+      "name": "cloud_enabled_wrong_type_null",
+      "body": {"cloud_enabled": null}
+    },
+    {
+      "name": "wifi_not_array",
+      "body": {"wifi": {}}
+    },
+    {
+      "name": "wifi_entry_not_object",
+      "body": {"wifi": ["bad"]}
+    },
+    {
+      "name": "wifi_entry_unknown_key",
+      "body": {"wifi": [{"slot": 0, "extra": 1}]}
+    },
+    {
+      "name": "wifi_slot_negative",
+      "body": {"wifi": [{"slot": -1, "ssid": ""}]}
+    },
+    {
+      "name": "wifi_slot_too_high",
+      "body": {"wifi": [{"slot": 5, "ssid": ""}]}
+    },
+    {
+      "name": "wifi_slot_float",
+      "body": {"wifi": [{"slot": 0.5, "ssid": ""}]}
+    },
+    {
+      "name": "wifi_slot_str",
+      "body": {"wifi": [{"slot": "0", "ssid": ""}]}
+    },
+    {
+      "name": "wifi_ssid_wrong_type",
+      "body": {"wifi": [{"slot": 0, "ssid": 123}]}
+    },
+    {
+      "name": "wifi_clear_pass_wrong_type",
+      "body": {"wifi": [{"slot": 0, "clear_pass": "yes"}]}
+    },
+    {
+      "name": "wifi_pass_wrong_type",
+      "body": {"wifi": [{"slot": 0, "ssid": "NetA", "pass": 12345678}]}
+    },
+    {
+      "name": "wifi_add_slot_with_8_char_pass",
+      "body": {"wifi": [{"slot": 0, "ssid": "HomeNet", "pass": "12345678"}]}
+    },
+    {
+      "name": "wifi_add_slot_with_63_char_pass",
+      "body": {"wifi": [{"slot": 4, "ssid": "BackupNet", "pass": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}]}
+    },
+    {
+      "name": "wifi_add_slot_7_char_pass_reject",
+      "body": {"wifi": [{"slot": 0, "ssid": "HomeNet", "pass": "1234567"}]}
+    },
+    {
+      "name": "wifi_add_slot_64_char_pass_reject",
+      "body": {"wifi": [{"slot": 0, "ssid": "HomeNet", "pass": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}]}
+    },
+    {
+      "name": "wifi_change_ssid_without_pass_reject",
+      "initial": {"wifi": [{"slot": 0, "ssid": "OldNet", "pass": "oldpass12"}]},
+      "body": {"wifi": [{"slot": 0, "ssid": "NewNet"}]}
+    },
+    {
+      "name": "wifi_change_ssid_with_empty_pass_reject",
+      "initial": {"wifi": [{"slot": 0, "ssid": "OldNet", "pass": "oldpass12"}]},
+      "body": {"wifi": [{"slot": 0, "ssid": "NewNet", "pass": ""}]}
+    },
+    {
+      "name": "wifi_change_ssid_with_clear_pass",
+      "initial": {"wifi": [{"slot": 0, "ssid": "OldNet", "pass": "oldpass12"}]},
+      "body": {"wifi": [{"slot": 0, "ssid": "OpenCafe", "clear_pass": true}]}
+    },
+    {
+      "name": "wifi_change_ssid_with_null_pass",
+      "initial": {"wifi": [{"slot": 0, "ssid": "OldNet", "pass": "oldpass12"}]},
+      "body": {"wifi": [{"slot": 0, "ssid": "OpenCafe", "pass": null}]}
+    },
+    {
+      "name": "wifi_keep_ssid_empty_pass",
+      "initial": {"wifi": [{"slot": 0, "ssid": "OldNet", "pass": "oldpass12"}]},
+      "body": {"wifi": [{"slot": 0, "ssid": "OldNet", "pass": ""}]}
+    },
+    {
+      "name": "wifi_clear_slot_empty_ssid",
+      "initial": {"wifi": [{"slot": 0, "ssid": "OldNet", "pass": "oldpass12"}]},
+      "body": {"wifi": [{"slot": 0, "ssid": ""}]}
+    },
+    {
+      "name": "wifi_ssid_32_ascii",
+      "body": {"wifi": [{"slot": 0, "ssid": "abcdefghijklmnopqrstuvwxyz012345", "clear_pass": true}]}
+    },
+    {
+      "name": "wifi_ssid_33_ascii_reject",
+      "body": {"wifi": [{"slot": 0, "ssid": "abcdefghijklmnopqrstuvwxyz0123456", "clear_pass": true}]}
+    },
+    {
+      "name": "wifi_ssid_32_bytes_utf8",
+      "body": {"wifi": [{"slot": 0, "ssid": "АБВГДЕЖЗИЙКЛМНОП", "clear_pass": true}]}
+    },
+    {
+      "name": "wifi_ssid_34_bytes_utf8_reject",
+      "body": {"wifi": [{"slot": 0, "ssid": "АБВГДЕЖЗИЙКЛМНОПР", "clear_pass": true}]}
+    },
+    {
+      "name": "device_name_min_single_char",
+      "body": {"device_name": "a"}
+    },
+    {
+      "name": "device_name_32_chars",
+      "body": {"device_name": "power-monitor-0123456789abcdefgh"}
+    },
+    {
+      "name": "device_name_33_chars_reject",
+      "body": {"device_name": "power-monitor-0123456789abcdefghi"}
+    },
+    {
+      "name": "device_name_leading_dash_reject",
+      "body": {"device_name": "-monitor"}
+    },
+    {
+      "name": "device_name_trailing_dash_reject",
+      "body": {"device_name": "monitor-"}
+    },
+    {
+      "name": "device_name_only_dash_reject",
+      "body": {"device_name": "-"}
+    },
+    {
+      "name": "device_name_empty_reject",
+      "body": {"device_name": ""}
+    },
+    {
+      "name": "device_name_uppercase_reject",
+      "body": {"device_name": "Monitor"}
+    },
+    {
+      "name": "device_name_underscore_reject",
+      "body": {"device_name": "power_monitor"}
+    },
+    {
+      "name": "device_name_trailing_newline_reject",
+      "body": {"device_name": "monitor\n"}
+    },
+    {
+      "name": "device_name_wrong_type",
+      "body": {"device_name": 123}
+    },
+    {
+      "name": "ap_ssid_empty_reject",
+      "body": {"ap_ssid": ""}
+    },
+    {
+      "name": "ap_ssid_32_bytes",
+      "body": {"ap_ssid": "abcdefghijklmnopqrstuvwxyz012345"}
+    },
+    {
+      "name": "ap_ssid_33_bytes_reject",
+      "body": {"ap_ssid": "abcdefghijklmnopqrstuvwxyz0123456"}
+    },
+    {
+      "name": "ap_ssid_wrong_type",
+      "body": {"ap_ssid": 100}
+    },
+    {
+      "name": "ap_pass_empty_keeps_not_applied",
+      "body": {"ap_pass": ""}
+    },
+    {
+      "name": "ap_pass_7_bytes_reject",
+      "body": {"ap_pass": "1234567"}
+    },
+    {
+      "name": "ap_pass_8_bytes",
+      "body": {"ap_pass": "12345678"}
+    },
+    {
+      "name": "ap_pass_63_bytes",
+      "body": {"ap_pass": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+    },
+    {
+      "name": "ap_pass_64_bytes_reject",
+      "body": {"ap_pass": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+    },
+    {
+      "name": "ap_pass_wrong_type",
+      "body": {"ap_pass": 12345678}
+    },
+    {
+      "name": "admin_pass_empty_keeps_not_applied",
+      "initial": {"admin_pass": "secret123"},
+      "body": {"admin_pass": ""}
+    },
+    {
+      "name": "admin_pass_7_bytes_reject",
+      "body": {"admin_pass": "1234567"}
+    },
+    {
+      "name": "admin_pass_8_bytes",
+      "body": {"admin_pass": "12345678"}
+    },
+    {
+      "name": "admin_pass_63_bytes",
+      "body": {"admin_pass": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+    },
+    {
+      "name": "admin_pass_64_bytes_reject",
+      "body": {"admin_pass": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+    },
+    {
+      "name": "admin_pass_null_clears",
+      "initial": {"admin_pass": "secret123"},
+      "body": {"admin_pass": null}
+    },
+    {
+      "name": "admin_pass_wrong_type",
+      "body": {"admin_pass": 12345678}
+    },
+    {
+      "name": "clear_admin_pass_true",
+      "initial": {"admin_pass": "secret123"},
+      "body": {"clear_admin_pass": true}
+    },
+    {
+      "name": "clear_admin_pass_wrong_type",
+      "body": {"clear_admin_pass": "true"}
+    },
+    {
+      "name": "clear_admin_pass_false_with_admin_pass",
+      "body": {"clear_admin_pass": false, "admin_pass": "newpass12"}
+    },
+    {
+      "name": "clear_admin_pass_true_with_admin_pass_reject",
+      "body": {"clear_admin_pass": true, "admin_pass": "newpass12"}
+    },
+    {
+      "name": "clear_admin_pass_true_with_empty_admin_pass_reject",
+      "body": {"clear_admin_pass": true, "admin_pass": ""}
+    },
+    {
+      "name": "webhook_url_empty",
+      "body": {"webhook_url": ""}
+    },
+    {
+      "name": "webhook_url_https",
+      "body": {"webhook_url": "https://ntfy.sh/power-test"}
+    },
+    {
+      "name": "webhook_url_invalid_scheme_reject",
+      "body": {"webhook_url": "ftp://example.com/hook"}
+    },
+    {
+      "name": "webhook_url_uppercase_scheme_reject",
+      "body": {"webhook_url": "HTTPS://ntfy.sh/test"}
+    },
+    {
+      "name": "webhook_url_256_bytes",
+      "body": {"webhook_url": "http://x.co/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbb"}
+    },
+    {
+      "name": "webhook_url_257_bytes_reject",
+      "body": {"webhook_url": "http://x.co/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbb"}
+    },
+    {
+      "name": "webhook_url_wrong_type",
+      "body": {"webhook_url": 123}
+    },
+    {
+      "name": "local_url_http_template",
+      "body": {"local_url": "http://192.168.1.60:8080/{event}"}
+    },
+    {
+      "name": "local_url_invalid_scheme_reject",
+      "body": {"local_url": "192.168.1.60:8080/{event}"}
+    },
+    {
+      "name": "local_url_256_bytes",
+      "body": {"local_url": "http://x.co/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbb"}
+    },
+    {
+      "name": "local_url_257_bytes_reject",
+      "body": {"local_url": "http://x.co/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbb"}
+    },
+    {
+      "name": "local_url_wrong_type",
+      "body": {"local_url": false}
+    },
+    {
+      "name": "multi_field_applied_order",
+      "body": {
+        "local_url": "http://192.168.1.60:8080/{event}",
+        "admin_pass": "secret123",
+        "setup_window_s": 180,
+        "wifi": [{"slot": 0, "ssid": "NetOne", "pass": "pass1234"}],
+        "webhook_url": "https://ntfy.sh/power-test"
+      }
+    }
+  ]
+}
