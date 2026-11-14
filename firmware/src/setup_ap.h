@@ -21,7 +21,7 @@ public:
     void update();
 
     void openSetupAp(uint32_t windowSeconds);
-    bool closeSetupAp();
+    void closeSetupAp();
     void notifyApHttpActivity();
     void applyWifiMode();
     void reconnectWiFi();
@@ -96,7 +96,7 @@ private:
 
     void processWebScan();
     void flushDeferredConnectorActions();
-    bool startSoftApRadio(bool checkFirstOpen, uint32_t now, uint32_t windowSeconds);
+    bool startSoftApRadio(bool isFreshOpen, uint32_t now, uint32_t windowSeconds);
 };
 
 #endif // SETUP_AP_H

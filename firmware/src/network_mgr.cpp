@@ -268,7 +268,8 @@ void NetworkManager::sendPowerOnAlert(SystemMode mode, uint32_t durationS, Alert
         millis() / 1000UL,
         alertMode,
         getEpochTime(),
-        *this
+        *this,
+        _wifiHal.status() == WL_CONNECTED
     );
 }
 
@@ -299,7 +300,8 @@ void NetworkManager::sendAlarmStop(SystemMode previousMode, SystemMode nextMode,
         snoozeRemainingS,
         millis() / 1000UL,
         getEpochTime(),
-        *this
+        *this,
+        _wifiHal.status() == WL_CONNECTED
     );
 }
 

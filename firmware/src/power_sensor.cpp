@@ -1,11 +1,5 @@
 #include "power_sensor.h"
 
-#ifdef ARDUINO
-static int defaultArduinoRead(uint8_t pin) {
-    return digitalRead(pin);
-}
-#endif
-
 PowerSensor::PowerSensor()
     : _sensePin(PIN_MAINS_SENSE),
       _debounceMs(DEFAULT_DEBOUNCE_MS),
@@ -46,13 +40,11 @@ void PowerSensor::init(uint8_t sensePin, uint32_t debounceMs, uint32_t cooldownM
     _debounceMs = debounceMs;
     _cooldownMs = cooldownMs;
     _clock = clock;
+    _readFn = readFn;
 #ifdef ARDUINO
-    _readFn = readFn ? readFn : defaultArduinoRead;
     if (!readFn) {
         pinMode(_sensePin, INPUT_PULLDOWN);
     }
-#else
-    _readFn = readFn;
 #endif
 
     _currentState = GRID_BOOTING;
@@ -128,10 +120,6 @@ void PowerSensor::update() {
 
 GridState PowerSensor::getGridState() const {
     return _currentState;
-}
-
-bool PowerSensor::isOnline() const {
-    return (_currentState == GRID_ONLINE);
 }
 
 const char* gridStateStr(GridState state) {

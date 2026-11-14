@@ -1112,7 +1112,7 @@ def check_ntfy_literals_parity():
     if not m_block:
         return ["could not locate ntfy header branches in firmware/src/network_mgr.cpp"]
 
-    hdr_re = re.compile(r'http\.addHeader\(\s*"(Title|Priority|Tags)"\s*,\s*"([^"]+)"\s*\)')
+    hdr_re = re.compile(r'http\.addHeader\(\s*"([^"]+)"\s*,\s*"([^"]+)"\s*\)')
     branch_map = {
         "POWER_OFF": m_block.group(1),
         "POWER_ON": m_block.group(2),
@@ -1122,16 +1122,9 @@ def check_ntfy_literals_parity():
         fw_hdrs = dict(hdr_re.findall(block_src))
         expected = mobile_alarm_sim.NTFY_TEMPLATES[ev_name]
         if set(fw_hdrs.keys()) != set(expected.keys()):
-            errors.append(f"ntfy headers missing in network_mgr.cpp for {ev_name}: got {sorted(fw_hdrs.keys())}")
+            errors.append(f"ntfy header names differ in network_mgr.cpp for {ev_name}: got {sorted(fw_hdrs.keys())}")
         elif fw_hdrs != expected:
             errors.append(f"ntfy headers mismatch for {ev_name}: fw={fw_hdrs}, tool={expected}")
-
-    if re.search(r'http\.addHeader\(\s*"Actions"\b', text):
-        errors.append("network_mgr.cpp must not send ntfy Actions header")
-    if hasattr(mobile_alarm_sim, "NTFY_ACTION_TEMPLATE"):
-        errors.append("mobile_alarm_sim.py must not define NTFY_ACTION_TEMPLATE")
-    if "Actions" in mobile_alarm_sim.build_ntfy_headers("POWER_OFF"):
-        errors.append("mobile_alarm_sim.build_ntfy_headers must not include Actions")
 
     m_body = re.search(
         r'String\s+messageBody\s*=\s*String\(\s*"([^"]+)"\s*\)\s*\+\s*payload\.event\s*\+\s*"([^"]+)"\s*\+\s*payload\.device\s*\+\s*"([^"]+)"\s*\+\s*payload\.duration_s\s*\+\s*"([^"]+)"',

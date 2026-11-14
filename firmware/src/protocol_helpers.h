@@ -80,7 +80,6 @@ struct PendingTargetState {
     AlertTrackingMode alertMode;
     SystemMode stopMode;
     uint32_t snoozeRemainingS;
-    uint32_t seq;
 };
 
 class AlertRouter {
@@ -116,12 +115,7 @@ public:
                                  uint32_t durationS, AlertTrackingMode alertMode,
                                  uint32_t eventSeq, bool staConnected);
 
-    void markPendingTargetAlarmStop(SystemMode stopMode, uint32_t snoozeRemainingS = 0,
-                                    uint32_t eventSeq = 0);
-
-    void markPendingTargetOutage(NotifyTarget target) {
-        markPendingTargetEvent(target, "POWER_OFF");
-    }
+    void markPendingTargetAlarmStop(SystemMode stopMode, uint32_t snoozeRemainingS);
 
     uint32_t getTargetStateSeq(NotifyTarget target) const;
 
@@ -139,7 +133,7 @@ private:
 
 const char* systemModeStr(SystemMode mode);
 bool canSnoozeMode(SystemMode mode);
-uint16_t normalizeSnoozeMinutes(uint32_t requestedMin, uint16_t fallbackMin = DEFAULT_SNOOZE_MIN);
+uint16_t normalizeSnoozeMinutes(uint32_t requestedMin, uint16_t fallbackMin);
 
 ButtonAction classifyPress(uint32_t pressDurationMs);
 LedPattern selectLedPattern(GridState gridState, bool apActive, SystemMode mode, bool btnHeld, uint32_t btnHeldMs);

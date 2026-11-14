@@ -42,7 +42,7 @@ void updateButton();
 void armSystem();
 void disarmSystem();
 void toggleArm();
-bool snoozeSystem(uint16_t durationMin);
+void snoozeSystem(uint16_t durationMin);
 void testAlarm();
 void performCleanRestart();
 String buildStatusJson();
@@ -180,11 +180,8 @@ void toggleArm() {
     }
 }
 
-bool snoozeSystem(uint16_t durationMin) {
-    if (!canSnoozeMode(currentMode)) {
-        Serial.println("[Control] SNOOZE ignored: system is disarmed.");
-        return false;
-    }
+// The caller (POST /api/snooze) rejects DISARMED with 409 before calling this.
+void snoozeSystem(uint16_t durationMin) {
     SystemMode prevMode = currentMode;
     uint16_t normMin = normalizeSnoozeMinutes(durationMin, deviceConfig.snooze_default_min);
     uint32_t snoozeRemS = (uint32_t)normMin * 60UL;
@@ -192,7 +189,6 @@ bool snoozeSystem(uint16_t durationMin) {
     snoozeUntilMs = millis() + (snoozeRemS * 1000UL);
     networkMgr.sendAlarmStop(prevMode, currentMode, snoozeRemS);
     Serial.printf("[Control] System state changed: SNOOZED for %u minutes\n", normMin);
-    return true;
 }
 
 void testAlarm() {

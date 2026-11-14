@@ -148,7 +148,6 @@ void WifiConnector::forceReconnect() {
     _tryingSlot = -1;
     _fastPathFailedSlot = -1;
     _backoffIdx = 0;
-    _configAttemptPending = false;
     if (!_disconnectedTimerRunning) {
         _disconnectedTimerRunning = true;
         _disconnectedSinceMs = _clock.millis();
@@ -359,7 +358,6 @@ void WifiConnector::update(bool apHasClients, bool webScanActive) {
             }
             char ipBuf[32];
             _wifi.localIpStr(ipBuf, sizeof(ipBuf));
-            (void)ipBuf;
             HAL_LOG_PRINTF("[WiFi] Connected to slot %d (%s), IP: %s, RSSI: %d dBm\n",
                            _connectedSlot,
                            (_connectedSlot >= 0) ? _slots[_connectedSlot].ssid : "(unknown)",

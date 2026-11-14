@@ -39,7 +39,6 @@ def build_payload(
     state="ARMED",
     alert_mode="OUTAGE_AND_RESTORE",
     duration_s=None,
-    uptime_s=None,
     now=None,
 ):
     """Build a contract-compliant HTTP/webhook JSON payload for the given event."""
@@ -55,7 +54,7 @@ def build_payload(
             "power": False,
             "armed": True,
             "duration_s": 0 if duration_s is None else int(duration_s),
-            "uptime_s": 120 if uptime_s is None else int(uptime_s),
+            "uptime_s": 120,
             "ts": ts_val,
         }
 
@@ -68,7 +67,7 @@ def build_payload(
             "power": True,
             "armed": (state == "ARMED"),
             "duration_s": 120 if duration_s is None else int(duration_s),
-            "uptime_s": 240 if uptime_s is None else int(uptime_s),
+            "uptime_s": 240,
             "alert_mode": alert_mode,
             "ts": ts_val,
         }
@@ -82,7 +81,7 @@ def build_payload(
             "power": False,
             "armed": (state == "ARMED"),
             "duration_s": 0,
-            "uptime_s": 600 if uptime_s is None else int(uptime_s),
+            "uptime_s": 600,
             "ts": ts_val,
         }
 

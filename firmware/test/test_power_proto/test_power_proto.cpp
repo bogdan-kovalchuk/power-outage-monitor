@@ -41,7 +41,6 @@ void test_P1_power_sensor_debounce_cooldown_flapping_boot_wrap(void) {
         ps.init(PIN_MAINS_SENSE, DEFAULT_DEBOUNCE_MS, DEFAULT_COOLDOWN_MS, &FakeGpio::readPin, &clk);
 
         TEST_ASSERT_EQUAL_INT(GRID_BOOTING, ps.getGridState());
-        TEST_ASSERT_FALSE(ps.isOnline());
 
         clk.advance(DEFAULT_DEBOUNCE_MS);
         ps.update();
@@ -265,7 +264,7 @@ void test_P5_pending_webhook_outage_resends_webhook_only(void) {
     {
         AlertRouter router;
         FakeAlertOutput out;
-        router.markPendingTargetOutage(NOTIFY_TARGET_CLOUD);
+        router.markPendingTargetEvent(NOTIFY_TARGET_CLOUD, "POWER_OFF");
 
         // Still disconnected -> no-op
         TEST_ASSERT_FALSE(router.flushPendingOnReconnect("mon", false, MODE_ARMED, 10, 100, 0, false, out));
@@ -286,7 +285,7 @@ void test_P5_pending_webhook_outage_resends_webhook_only(void) {
     {
         AlertRouter router;
         FakeAlertOutput out;
-        router.markPendingTargetOutage(NOTIFY_TARGET_LOCAL);
+        router.markPendingTargetEvent(NOTIFY_TARGET_LOCAL, "POWER_OFF");
         TEST_ASSERT_TRUE(router.flushPendingOnReconnect("mon", false, MODE_ARMED, 18, 108, 0, true, out));
         TEST_ASSERT_EQUAL_UINT(1, (unsigned int)out.notifications.size());
         TEST_ASSERT_EQUAL_INT((int)NOTIFY_TARGET_LOCAL, (int)out.notifications[0].target);
@@ -297,13 +296,13 @@ void test_P5_pending_webhook_outage_resends_webhook_only(void) {
     {
         AlertRouter router;
         FakeAlertOutput out;
-        router.markPendingTargetOutage(NOTIFY_TARGET_LOCAL);
-        router.markPendingTargetOutage(NOTIFY_TARGET_CLOUD);
+        router.markPendingTargetEvent(NOTIFY_TARGET_LOCAL, "POWER_OFF");
+        router.markPendingTargetEvent(NOTIFY_TARGET_CLOUD, "POWER_OFF");
         TEST_ASSERT_FALSE(router.flushPendingOnReconnect("mon", true, MODE_ARMED, 20, 110, 0, true, out));
         TEST_ASSERT_EQUAL_UINT(0, (unsigned int)out.notifications.size());
         TEST_ASSERT_FALSE(router.flushPendingOnReconnect("mon", false, MODE_ARMED, 21, 111, 0, true, out));
 
-        router.markPendingTargetOutage(NOTIFY_TARGET_CLOUD);
+        router.markPendingTargetEvent(NOTIFY_TARGET_CLOUD, "POWER_OFF");
         TEST_ASSERT_FALSE(router.flushPendingOnReconnect("mon", false, MODE_DISARMED, 20, 120, 0, true, out));
         TEST_ASSERT_EQUAL_UINT(0, (unsigned int)out.notifications.size());
         TEST_ASSERT_FALSE(router.flushPendingOnReconnect("mon", false, MODE_ARMED, 21, 121, 0, true, out));
@@ -454,7 +453,6 @@ void test_P7_boot_state_machine_low_high_and_bounce_restarts_window(void) {
         ps.init(PIN_MAINS_SENSE, 1500, 5000, &FakeGpio::readPin, &clk);
 
         TEST_ASSERT_EQUAL_INT(GRID_BOOTING, ps.getGridState());
-        TEST_ASSERT_FALSE(ps.isOnline());
         TEST_ASSERT_EQUAL_UINT32(0, ps.getOutageDurationSeconds());
         TEST_ASSERT_EQUAL_INT(0, g_outageCbCount);
 
@@ -495,7 +493,6 @@ void test_P7_boot_state_machine_low_high_and_bounce_restarts_window(void) {
         clk.advance(1);
         ps.update();
         TEST_ASSERT_EQUAL_INT(GRID_ONLINE, ps.getGridState());
-        TEST_ASSERT_TRUE(ps.isOnline());
         TEST_ASSERT_EQUAL_INT(0, g_outageCbCount);
         TEST_ASSERT_EQUAL_INT(0, g_restoreCbCount);
     }

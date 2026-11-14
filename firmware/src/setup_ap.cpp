@@ -150,20 +150,17 @@ void SetupApController::openSetupAp(uint32_t windowSeconds) {
                    _effectiveApSsid, SETUP_AP_IP_STR, (unsigned)(_apWindowDurationMs / 1000UL));
 }
 
-bool SetupApController::closeSetupAp() {
+void SetupApController::closeSetupAp() {
     if (!_apModeActive) {
-        if (_apStartPending && !hasSavedNetworks()) {
-            return false;
-        }
-        if (_apStartPending) {
+        if (_apStartPending && hasSavedNetworks()) {
             _apStartPending = false;
             applyWifiMode();
         }
-        return true;
+        return;
     }
     if (!hasSavedNetworks()) {
         HAL_LOG_PRINT("[WiFi] Cannot close setup AP: no saved networks.");
-        return false;
+        return;
     }
     _wifi.dnsStop();
     _wifi.softApStop();
@@ -180,7 +177,6 @@ bool SetupApController::closeSetupAp() {
         _fallbackClosedAtMs = _clock.millis();
     }
     HAL_LOG_PRINT("[WiFi] Setup AP closed; STA mode active.");
-    return true;
 }
 
 void SetupApController::notifyApHttpActivity() {
@@ -271,6 +267,8 @@ void SetupApController::processDeferredActions() {
     }
 }
 
+// _config changes only in init() and here, so the deferred apply compares the saved networks
+// and AP credentials against the state before the save.
 void SetupApController::onConfigApplied(const DeviceConfig& config, bool triggerReconnect) {
     bool hadSavedBefore = hasSavedNetworks();
     bool apCredsChanged = (strcmp(_config.ap_ssid, config.ap_ssid) != 0) ||
@@ -500,10 +498,7 @@ const char* SetupApController::pollWifiScanJsonPtr() {
     return "{\"status\":\"scanning\"}";
 }
 
-// _config changes only in init() and onConfigApplied(), so the deferred apply compares the
-// saved networks and AP credentials against the state before the save.
 void SetupApController::update() {
-
     processDeferredActions();
     processWebScan();
 

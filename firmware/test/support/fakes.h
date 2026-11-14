@@ -13,7 +13,7 @@
 
 class FakeClock : public IClock {
 public:
-    FakeClock(uint32_t initialMs = 0) : _now(initialMs) {}
+    explicit FakeClock(uint32_t initialMs) : _now(initialMs) {}
 
     uint32_t millis() const override { return _now; }
     void set(uint32_t ms) { _now = ms; }
@@ -547,7 +547,7 @@ public:
 
 class FakeSystemActions : public ISetupSystemActions {
 public:
-    FakeSystemActions(SetupApController* ap = nullptr, DeviceConfig* trackedCfg = nullptr)
+    FakeSystemActions(SetupApController* ap, DeviceConfig* trackedCfg)
         : _ap(ap), _trackedCfg(trackedCfg), applyCount(0), factoryResetCount(0), rebootCount(0), lastTriggerReconnect(false) {}
 
     void onApplyConfig(const DeviceConfig& config, bool triggerReconnect) override {

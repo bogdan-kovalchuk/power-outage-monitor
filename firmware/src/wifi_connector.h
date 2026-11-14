@@ -25,7 +25,7 @@ public:
     void wakeFromBackoff();
 
     // Non-blocking update driven from NetworkManager::update()
-    void update(bool apHasClients, bool webScanActive = false);
+    void update(bool apHasClients, bool webScanActive);
 
     WifiConnState getState() const { return _state; }
     bool isScanning() const { return _state == WIFI_CONN_SCANNING; }

@@ -632,7 +632,9 @@ void AlertRouter::markPendingTargetEvent(NotifyTarget target, const char* eventN
     if (eventSeq != 0 && eventSeq < _targetSeq[target]) {
         return;
     }
-    uint32_t seq = (eventSeq != 0) ? eventSeq : ++_targetSeq[target];
+    if (eventSeq == 0) {
+        ++_targetSeq[target];
+    }
 
     if (target == NOTIFY_TARGET_CLOUD) {
         if (ev == PENDING_EVENT_ALARM_STOP) {
@@ -641,7 +643,6 @@ void AlertRouter::markPendingTargetEvent(NotifyTarget target, const char* eventN
         if (ev == PENDING_EVENT_POWER_ON && alertMode != ALERT_OUTAGE_AND_RESTORE) {
             if (_pending[NOTIFY_TARGET_CLOUD].event == PENDING_EVENT_POWER_OFF) {
                 _pending[NOTIFY_TARGET_CLOUD].event = PENDING_EVENT_NONE;
-                _pending[NOTIFY_TARGET_CLOUD].seq = seq;
             }
             return;
         }
@@ -653,12 +654,11 @@ void AlertRouter::markPendingTargetEvent(NotifyTarget target, const char* eventN
     slot.alertMode = alertMode;
     slot.stopMode = _lastStopMode;
     slot.snoozeRemainingS = _lastStopSnoozeS;
-    slot.seq = seq;
 
     if (ev == PENDING_EVENT_POWER_ON && alertMode == ALERT_OUTAGE_ONLY &&
         _pending[NOTIFY_TARGET_CLOUD].event == PENDING_EVENT_POWER_OFF) {
         _pending[NOTIFY_TARGET_CLOUD].event = PENDING_EVENT_NONE;
-        _pending[NOTIFY_TARGET_CLOUD].seq = ++_targetSeq[NOTIFY_TARGET_CLOUD];
+        ++_targetSeq[NOTIFY_TARGET_CLOUD];
     }
 }
 
@@ -671,8 +671,7 @@ void AlertRouter::handleAttemptsExhausted(NotifyTarget target, const char* event
     markPendingTargetEvent(target, eventName, durationS, alertMode, eventSeq);
 }
 
-void AlertRouter::markPendingTargetAlarmStop(SystemMode stopMode, uint32_t snoozeRemainingS,
-                                             uint32_t eventSeq) {
+void AlertRouter::markPendingTargetAlarmStop(SystemMode stopMode, uint32_t snoozeRemainingS) {
     {
         ScopedSpinLock guard(_locked);
         _lastStopMode = (stopMode == MODE_SNOOZED) ? MODE_SNOOZED : MODE_DISARMED;
@@ -682,7 +681,7 @@ void AlertRouter::markPendingTargetAlarmStop(SystemMode stopMode, uint32_t snooz
             ++_targetSeq[NOTIFY_TARGET_CLOUD];
         }
     }
-    markPendingTargetEvent(NOTIFY_TARGET_LOCAL, "ALARM_STOP", 0, ALERT_OUTAGE_ONLY, eventSeq);
+    markPendingTargetEvent(NOTIFY_TARGET_LOCAL, "ALARM_STOP", 0, ALERT_OUTAGE_ONLY);
 }
 
 void AlertRouter::handlePowerOff(const char* deviceName, SystemMode mode, uint32_t durationS,

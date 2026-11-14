@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Mock ESP32 Power Outage Monitor device (stdlib only) for L2/L3/L4 verification."""
+"""Mock ESP32 Power Outage Monitor device (stdlib only) for L2/L3 verification and LAN phone tests."""
 
 import argparse
 import base64
@@ -1433,7 +1433,6 @@ class MockDeviceServer:
     ):
         self.html = extract_web_ui_html()
         self.state = MockDeviceState(self.html)
-        self.lan = lan
         self.host = "0.0.0.0" if lan else host
         handler_cls = _make_handler(self.state)
         self.httpd = _ThreadingHTTPServer((self.host, port), handler_cls)

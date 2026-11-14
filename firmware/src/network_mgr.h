@@ -47,7 +47,7 @@ public:
     void sendPowerOffAlert(SystemMode mode, uint32_t durationS);
     void sendPowerOnAlert(SystemMode mode, uint32_t durationS, AlertTrackingMode alertMode);
     void handleEnterArmed(SystemMode previousMode, GridState gridState, uint32_t outageDurationS);
-    void sendAlarmStop(SystemMode previousMode, SystemMode nextMode, uint32_t snoozeRemainingS = 0);
+    void sendAlarmStop(SystemMode previousMode, SystemMode nextMode, uint32_t snoozeRemainingS);
     void sendTestAlert(SystemMode mode);
 
     // Lifecycle callback registration

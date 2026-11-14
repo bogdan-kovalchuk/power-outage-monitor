@@ -314,7 +314,7 @@ static const char INDEX_HTML[] PROGMEM = R"rawliteral(<!DOCTYPE html>
     <!-- Wi-Fi Network Card (Primary Slot 1) -->
     <div id="wifiCard" class="card">
       <div class="collapsible-trigger" onclick="toggleCard('wifi')">
-        <span id="wifiCardTitle">Wi-Fi Network</span>
+        <span>Wi-Fi Network</span>
         <span id="arrow_wifi">&#x25BC;</span>
       </div>
       <div id="body_wifi" class="card-body">
@@ -658,13 +658,9 @@ static const char INDEX_HTML[] PROGMEM = R"rawliteral(<!DOCTYPE html>
       return (ev || '').toLowerCase();
     }
 
-    function setNotifyPill(el, label, rec, isConfigured, showWhenUnconfigured) {
+    function setNotifyPill(el, label, rec, isConfigured) {
       if (!el) return;
       if (!isConfigured && !rec) {
-        if (!showWhenUnconfigured) {
-          el.style.display = 'none';
-          return;
-        }
         el.style.display = 'inline-block';
         el.className = 'notify-badge';
         el.textContent = label + ': not configured';
@@ -699,13 +695,13 @@ static const char INDEX_HTML[] PROGMEM = R"rawliteral(<!DOCTYPE html>
           phoneEl.className = 'notify-badge';
           phoneEl.textContent = 'Phone: not tested yet';
         } else {
-          setNotifyPill(phoneEl, 'Phone', notify.local || null, phoneConfigured, true);
+          setNotifyPill(phoneEl, 'Phone', notify.local || null, phoneConfigured);
         }
       }
       const cloudEl = document.getElementById('cloudNotifyStatus');
       if (cloudEl) {
         if (notify.cloud) {
-          setNotifyPill(cloudEl, 'Cloud', notify.cloud, true, true);
+          setNotifyPill(cloudEl, 'Cloud', notify.cloud, true);
         } else if (cfg) {
           if (!cfg.cloud_enabled) {
             cloudEl.style.display = 'inline-block';
@@ -713,7 +709,7 @@ static const char INDEX_HTML[] PROGMEM = R"rawliteral(<!DOCTYPE html>
             cloudEl.textContent = 'Cloud: off';
           } else {
             const cloudConfigured = !!(cfg.webhook_url && cfg.webhook_url.length > 0);
-            setNotifyPill(cloudEl, 'Cloud', null, cloudConfigured, true);
+            setNotifyPill(cloudEl, 'Cloud', null, cloudConfigured);
           }
         } else {
           cloudEl.style.display = 'none';
@@ -770,10 +766,9 @@ static const char INDEX_HTML[] PROGMEM = R"rawliteral(<!DOCTYPE html>
       const wrap = document.getElementById('wifiRows');
       const advWrap = document.getElementById('advWifiRows');
       wrap.textContent = '';
-      if (advWrap) advWrap.textContent = '';
+      advWrap.textContent = '';
       wifiSlotCount = count;
       activeSsidIdx = 0;
-      document.getElementById('wifiCardTitle').textContent = 'Wi-Fi Network';
 
       for (let i = 0; i < count; i++) {
         const isPrimary = (i === 0);
@@ -839,7 +834,7 @@ static const char INDEX_HTML[] PROGMEM = R"rawliteral(<!DOCTYPE html>
         slot.appendChild(ssidIn);
         slot.appendChild(passIn);
         slot.appendChild(ctrl);
-        (isPrimary || !advWrap ? wrap : advWrap).appendChild(slot);
+        (isPrimary ? wrap : advWrap).appendChild(slot);
       }
     }
 
@@ -1025,9 +1020,8 @@ static const char INDEX_HTML[] PROGMEM = R"rawliteral(<!DOCTYPE html>
       b.style.display = 'block';
     }
 
-    async function saveWifi(startIdx, endIdx) {
-      const from = (startIdx === undefined) ? 0 : startIdx;
-      const to = (endIdx === undefined) ? wifiSlotCount : Math.min(endIdx, wifiSlotCount);
+    async function saveWifi(from, endIdx) {
+      const to = Math.min(endIdx, wifiSlotCount);
       const isBackup = (from > 0);
       const errFn = isBackup ? showAdvWifiErr : showWifiErr;
       const cardTag = isBackup ? 'advWifi' : 'wifi';

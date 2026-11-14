@@ -14,9 +14,9 @@ public:
     PowerSensor();
 
     // Initialize GPIO pin and initial state (injectable readFn & clock for host testing)
-    void init(uint8_t sensePin = PIN_MAINS_SENSE,
-              uint32_t debounceMs = DEFAULT_DEBOUNCE_MS,
-              uint32_t cooldownMs = DEFAULT_COOLDOWN_MS,
+    void init(uint8_t sensePin,
+              uint32_t debounceMs,
+              uint32_t cooldownMs,
               GpioReadFn readFn = nullptr,
               const IClock* clock = nullptr);
 
@@ -25,7 +25,6 @@ public:
 
     // Current grid status
     GridState getGridState() const;
-    bool isOnline() const;
 
     // Outage duration: elapsed seconds if currently offline, or duration of last outage
     uint32_t getOutageDurationSeconds() const;

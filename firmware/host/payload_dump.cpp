@@ -158,15 +158,11 @@ static bool runConfigCases(const char* outDir, const char* casesPath) {
         return false;
     }
 
-    JsonArrayConst casesArr;
-    if (casesDoc.is<JsonObjectConst>() && casesDoc["cases"].is<JsonArrayConst>()) {
-        casesArr = casesDoc["cases"].as<JsonArrayConst>();
-    } else if (casesDoc.is<JsonArrayConst>()) {
-        casesArr = casesDoc.as<JsonArrayConst>();
-    } else {
+    if (!casesDoc["cases"].is<JsonArrayConst>()) {
         fprintf(stderr, "Invalid config cases format in %s\n", casesPath);
         return false;
     }
+    JsonArrayConst casesArr = casesDoc["cases"].as<JsonArrayConst>();
 
     JsonDocument outDoc;
     JsonArray results = outDoc.to<JsonArray>();
