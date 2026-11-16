@@ -28,10 +28,10 @@ import mobile_alarm_sim  # noqa: E402
 import mock_device  # noqa: E402
 
 SCHEMA_FILES = (
-    "POWER_OFF.schema.json",
-    "POWER_ON.schema.json",
-    "ALARM_STOP.schema.json",
-    "TEST_ALARM.schema.json",
+    "event_power_off.schema.json",
+    "event_power_on.schema.json",
+    "event_alarm_stop.schema.json",
+    "event_test_alarm.schema.json",
     "api_status.schema.json",
     "api_config.schema.json",
 )
@@ -154,10 +154,10 @@ def check_firmware_payloads(payload_dir=None, payload_exec_error=None):
     try:
         schemas_dir = os.path.join(REPO_ROOT, "docs", "schemas")
         pairs = (
-            ("POWER_OFF.json", "POWER_OFF.schema.json"),
-            ("POWER_ON.json", "POWER_ON.schema.json"),
-            ("ALARM_STOP.json", "ALARM_STOP.schema.json"),
-            ("TEST_ALARM.json", "TEST_ALARM.schema.json"),
+            ("POWER_OFF.json", "event_power_off.schema.json"),
+            ("POWER_ON.json", "event_power_on.schema.json"),
+            ("ALARM_STOP.json", "event_alarm_stop.schema.json"),
+            ("TEST_ALARM.json", "event_test_alarm.schema.json"),
             ("status.json", "api_status.schema.json"),
             ("status_booting.json", "api_status.schema.json"),
             ("config.json", "api_config.schema.json"),
@@ -200,11 +200,11 @@ def check_mobile_alarm_payloads():
     errors = []
     schemas_dir = os.path.join(REPO_ROOT, "docs", "schemas")
     cases = (
-        ("POWER_OFF.schema.json", mobile_alarm_sim.build_payload("POWER_OFF", now=1700000100)),
-        ("POWER_ON.schema.json", mobile_alarm_sim.build_payload("POWER_ON", alert_mode="OUTAGE_AND_RESTORE", now=1700000200)),
-        ("POWER_ON.schema.json", mobile_alarm_sim.build_payload("POWER_ON", alert_mode="OUTAGE_ONLY", now=1700000201)),
-        ("TEST_ALARM.schema.json", mobile_alarm_sim.build_payload("TEST_ALARM", state="ARMED", now=1700000500)),
-        ("TEST_ALARM.schema.json", mobile_alarm_sim.build_payload("TEST_ALARM", state="DISARMED", now=1700000501)),
+        ("event_power_off.schema.json", mobile_alarm_sim.build_payload("POWER_OFF", now=1700000100)),
+        ("event_power_on.schema.json", mobile_alarm_sim.build_payload("POWER_ON", alert_mode="OUTAGE_AND_RESTORE", now=1700000200)),
+        ("event_power_on.schema.json", mobile_alarm_sim.build_payload("POWER_ON", alert_mode="OUTAGE_ONLY", now=1700000201)),
+        ("event_test_alarm.schema.json", mobile_alarm_sim.build_payload("TEST_ALARM", state="ARMED", now=1700000500)),
+        ("event_test_alarm.schema.json", mobile_alarm_sim.build_payload("TEST_ALARM", state="DISARMED", now=1700000501)),
     )
     for schema_name, payload in cases:
         sp = os.path.join(schemas_dir, schema_name)
@@ -372,21 +372,21 @@ def check_live_mock_contracts():
         if st != 200:
             errors.append(f"mock /__grid offline returned {st}")
         hooks = _drain_hooks()
-        _validate_hook_bodies(hooks, "/local/power_off", "POWER_OFF.schema.json", "HTTP local POWER_OFF")
-        _validate_hook_bodies(hooks, "/cloud/power_off", "POWER_OFF.schema.json", "HTTP cloud POWER_OFF")
+        _validate_hook_bodies(hooks, "/local/power_off", "event_power_off.schema.json", "HTTP local POWER_OFF")
+        _validate_hook_bodies(hooks, "/cloud/power_off", "event_power_off.schema.json", "HTTP cloud POWER_OFF")
 
         # POWER_ON via /__grid online (alert_mode=0 -> local_url gets it, webhook_url does not)
         _http_request(f"{base}/__grid", "POST", {"Content-Type": "application/json"}, b'{"grid":"online"}')
         hooks = _drain_hooks()
-        _validate_hook_bodies(hooks, "/local/power_on", "POWER_ON.schema.json", "HTTP local POWER_ON")
+        _validate_hook_bodies(hooks, "/local/power_on", "event_power_on.schema.json", "HTTP local POWER_ON")
         if any(h["path"] == "/cloud/power_on" for h in hooks):
             errors.append(f"mock POWER_ON alert_mode=0 leaked to cloud: got {[h['path'] for h in hooks]}")
 
         # TEST_ALARM via /api/test
         _http_request(f"{base}/api/test", "POST")
         hooks = _drain_hooks()
-        _validate_hook_bodies(hooks, "/local/test_alarm", "TEST_ALARM.schema.json", "HTTP local TEST_ALARM")
-        _validate_hook_bodies(hooks, "/cloud/test_alarm", "TEST_ALARM.schema.json", "HTTP cloud TEST_ALARM")
+        _validate_hook_bodies(hooks, "/local/test_alarm", "event_test_alarm.schema.json", "HTTP local TEST_ALARM")
+        _validate_hook_bodies(hooks, "/cloud/test_alarm", "event_test_alarm.schema.json", "HTTP cloud TEST_ALARM")
 
         _, _, st_body = _http_request(f"{base}/api/status")
         st_after_test = json.loads(st_body.decode("utf-8"))
@@ -410,7 +410,7 @@ def check_live_mock_contracts():
             except json.JSONDecodeError:
                 errors.append(f"mock {label} ALARM_STOP body is not JSON: {hooks[0]['body']!r}")
                 return
-            for e in _validate_against_schema(body_obj, os.path.join(schemas_dir, "ALARM_STOP.schema.json"), validator_cls, jsonschema_mod):
+            for e in _validate_against_schema(body_obj, os.path.join(schemas_dir, "event_alarm_stop.schema.json"), validator_cls, jsonschema_mod):
                 errors.append(f"mock {label} ALARM_STOP: {e}")
             if body_obj.get("state") != expected_state:
                 errors.append(f"mock {label} ALARM_STOP state={body_obj.get('state')!r}, expected {expected_state!r}")
