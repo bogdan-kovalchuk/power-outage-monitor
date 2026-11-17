@@ -9,7 +9,5 @@
 # CAD and print files are stored byte for byte as exported.
 *.SLDPRT binary
 *.SLDASM binary
-*.STEP binary
-*.step binary
 *.STL binary
 *.stl binary
